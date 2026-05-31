@@ -22,6 +22,14 @@ namespace kartlib.Imaging
                     return new RGB5A3();
                 case ImageFormatEnum.RGBA8:
                     return new RGBA8();
+                case ImageFormatEnum.C4:
+                    return new C4();
+                case ImageFormatEnum.C8:
+                    return new C8();
+                case ImageFormatEnum.C14:
+                    return new C14();
+                case ImageFormatEnum.CMPR:
+                    return new CMPR();
                 default:
                     return null;
             }

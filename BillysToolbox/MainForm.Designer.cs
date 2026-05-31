@@ -60,6 +60,7 @@
             openToolStripButton = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
             settingsToolStripButton = new ToolStripButton();
+            tPLToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             toolStrip1.SuspendLayout();
             SuspendLayout();
@@ -73,7 +74,7 @@
             // 
             // newToolStripMenuItem
             // 
-            newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { u8ArchiveToolStripMenuItem, postEffectToolStripMenuItem, kMPToolStripMenuItem, kCLToolStripMenuItem, bMMToolStripMenuItem });
+            newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { u8ArchiveToolStripMenuItem, postEffectToolStripMenuItem, kMPToolStripMenuItem, kCLToolStripMenuItem, bMMToolStripMenuItem, tPLToolStripMenuItem });
             newToolStripMenuItem.Image = Properties.Resources.page_white_add;
             newToolStripMenuItem.Name = "newToolStripMenuItem";
             newToolStripMenuItem.Size = new Size(184, 26);
@@ -307,6 +308,14 @@
             settingsToolStripButton.Size = new Size(24, 24);
             settingsToolStripButton.Text = "Settings";
             // 
+            // tPLToolStripMenuItem
+            // 
+            tPLToolStripMenuItem.Image = Properties.Resources.Decal;
+            tPLToolStripMenuItem.Name = "tPLToolStripMenuItem";
+            tPLToolStripMenuItem.Size = new Size(184, 26);
+            tPLToolStripMenuItem.Text = "TPL";
+            tPLToolStripMenuItem.Click += tPLToolStripMenuItem_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -362,5 +371,6 @@
         private ToolStripMenuItem kMPToolStripMenuItem;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem nImageScalerToolStripMenuItem;
+        private ToolStripMenuItem tPLToolStripMenuItem;
     }
 }

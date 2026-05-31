@@ -8,6 +8,8 @@ namespace BillysToolbox.Editors
         private TPL? FileInstance;
         private U8? ParentInstance;
 
+        private int SelectedImage = 0;
+
         public TPLViewerForm(TPL fileInstance)
         {
             FileInstance = fileInstance;
@@ -94,16 +96,80 @@ namespace BillysToolbox.Editors
             if (FileInstance == null) return;
             if (FileInstance.Images.Count <= 0) return;
 
+            listBox1.Items.Clear();
             for (int i = 0; i < FileInstance.Images.Count; i++)
             {
                 listBox1.Items.Add($"Image {i}");
             }
 
-            TPL._Image image = FileInstance.Images[0];
+            TPL._Image image = FileInstance.Images[SelectedImage];
 
             imagePreview.BackgroundImage = image.Image;
             imageStatusStrip.Items[0].Text = $"Image Format: {FormatToString(image.GetFormat())} |";
             imageStatusStrip.Items[1].Text = $"{image.Image.Width}x{image.Image.Height} |";
+        }
+
+        private void addImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Multiselect = true;
+                ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;|" +
+                         "JPEG Image|*.jpg;*.jpeg|" +
+                         "PNG Image|*.png|" +
+                         "Bitmap Image|*.bmp|" +
+                         "All Files|*.*";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (string s in ofd.FileNames)
+                    {
+                        try
+                        {
+                            Image image = Image.FromFile(s);
+                            Bitmap bmp = new Bitmap(image);
+                            FileInstance.AddImage(bmp, ImageFormatEnum.CMPR);
+                        }
+                        catch (Exception ex)
+                        {
+                            return;
+                        }
+                    }
+
+                    PopulateUI();
+                }
+            }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedImage = listBox1.SelectedIndex;
+            PopulateUI();
+        }
+
+        private void exportImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;|" +
+                         "JPEG Image|*.jpg;*.jpeg|" +
+                         "PNG Image|*.png|" +
+                         "Bitmap Image|*.bmp|" +
+                         "All Files|*.*";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        TPL._Image image = FileInstance.Images[SelectedImage];
+                        image.Image.Save(sfd.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        return;
+                    }
+                }
+            }
         }
     }
 }

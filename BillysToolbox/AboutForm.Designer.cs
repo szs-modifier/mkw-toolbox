@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             logoPictureBox = new PictureBox();
             label1 = new Label();
             richTextBox1 = new RichTextBox();
@@ -36,9 +37,9 @@
             // 
             // logoPictureBox
             // 
-            logoPictureBox.BackgroundImage = Properties.Resources.bobomb;
+            logoPictureBox.BackgroundImage = (Image)resources.GetObject("logoPictureBox.BackgroundImage");
             logoPictureBox.BackgroundImageLayout = ImageLayout.Stretch;
-            logoPictureBox.Location = new Point(12, 12);
+            logoPictureBox.Location = new Point(282, 9);
             logoPictureBox.Name = "logoPictureBox";
             logoPictureBox.Size = new Size(54, 54);
             logoPictureBox.TabIndex = 0;
@@ -48,7 +49,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 23.9999962F, FontStyle.Bold);
-            label1.Location = new Point(72, 17);
+            label1.Location = new Point(53, 18);
             label1.Name = "label1";
             label1.Size = new Size(229, 37);
             label1.TabIndex = 1;
@@ -61,7 +62,7 @@
             richTextBox1.ReadOnly = true;
             richTextBox1.Size = new Size(363, 65);
             richTextBox1.TabIndex = 2;
-            richTextBox1.Text = "MKW Toolbox is a program created by BillyNoodles. Inspired by Wexos's Toolbox, it uses MDI windows to display its editors.\n\nThanks to Laython, for nothing";
+            richTextBox1.Text = "MKW Toolbox is a program created by BillyNoodles. Inspired by Wexos's Toolbox, it uses MDI windows to display its editors.";
             // 
             // AboutForm
             // 

@@ -197,6 +197,21 @@ namespace kartlib.Serial
 
         private ImageFormat Format;
 
+        public TPL(string filename = "untitled.tpl")
+        {
+            Filename = filename;
+
+            FileHeader = new _FileHeader
+            {
+                Version = 0x0020AF30,
+                ImageCount = 0,
+                ImageTableOffset = 0x0C
+            };
+
+            ImageTables = new List<_ImageTable>();
+            Images = new List<_Image>();
+        }
+
         public TPL(byte[] buffer, string filename)
         {
             Filename = filename;

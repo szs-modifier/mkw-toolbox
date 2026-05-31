@@ -1,7 +1,5 @@
 using BillysToolbox.Editors;
 using BillysToolbox.Tools.ImageScaler;
-using kartlib.Imaging;
-using kartlib.Imaging.Formats;
 using kartlib.Serial;
 using System.Text;
 
@@ -18,6 +16,7 @@ namespace BillysToolbox
             { "BLIGHT Files (*.blight)", "*.blight" },
             { "BDOF Files (*.bdof_", "*.bdof" },
             { "KCL Files (*.kcl)", "*.kcl" },
+            { "TPL Files (*.tpl)", "*.tpl" },
             { "All Files (*.*)", "*.*" },
         };
         public List<KeyValuePair<string, byte[]>> Clipboard = new List<KeyValuePair<string, byte[]>>();
@@ -206,6 +205,17 @@ namespace BillysToolbox
             {
                 imageScalerForm.MdiParent = this;
                 imageScalerForm.Show();
+            }
+        }
+
+        private void tPLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TPL tpl = new TPL();
+            TPLViewerForm? editor = new(tpl);
+            if (editor != null)
+            {
+                editor.MdiParent = this;
+                editor.Show();
             }
         }
     }
