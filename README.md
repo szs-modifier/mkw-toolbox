@@ -11,9 +11,12 @@ Wii file editor inspired by [Wexos's Toolbox](https://wiki.tockdom.com/wiki/Wexo
 | BMM | Yes | Yes |
 | KMP | Yes | Yes |
 | KCL | Yes | Yes |
-| BRRES* | No | No |
 | BLIGHT | Yes | Yes |
 | BDOF | Yes | Yes |
+| BBLM* | No | No |
+| BFG* | No | No |
+| BLMAP* | No | No |
 | TPL | Yes | Yes |
+| BREFF | Yes | Yes |
 
 \* Still under development
