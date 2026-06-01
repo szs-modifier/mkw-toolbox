@@ -4,8 +4,8 @@ namespace System.Windows.Forms
 {
     public partial class Viewport2D : Panel
     {
-        private Graphics?   Graphics;
         private List<Shape> Shapes;
+        private List<Shape> BackgroundShapes;
 
         private const float ZoomRate = 0.0005f;
         private float       Zoom = 0.01f;
@@ -19,6 +19,7 @@ namespace System.Windows.Forms
         {
             this.DoubleBuffered = true;
             this.Shapes         = new List<Shape>();
+            this.BackgroundShapes = new List<Shape>();
             this.Offset         = new Vector2f();
             this.MouseDelta     = new Vector2f();
 
@@ -48,6 +49,16 @@ namespace System.Windows.Forms
             this.Shapes.Clear();
         }
 
+        public void SetBackgroundShapes(IEnumerable<Shape> shapes)
+        {
+            this.BackgroundShapes = new List<Shape>(shapes);
+        }
+
+        public void ClearBackgroundShapes()
+        {
+            this.BackgroundShapes.Clear();
+        }
+
         public Vector2f GetOffset() { return this.Offset; }
 
         public float GetZoom() { return this.Zoom; }
@@ -60,17 +71,20 @@ namespace System.Windows.Forms
             this.Offset.Y = (this.Height / 2) - (y * Zoom);
         }
 
-        private void DrawShapes()
+        private void DrawShapes(Graphics graphics)
         {
-            if(this.Graphics == null)
-                return;
+            DrawShapeList(graphics, this.BackgroundShapes);
+            DrawShapeList(graphics, this.Shapes);
+        }
 
-            foreach(Shape shape in this.Shapes)
+        private void DrawShapeList(Graphics graphics, List<Shape> shapes)
+        {
+            foreach(Shape shape in shapes)
             {
-                List<Vector2f> transPos = new List<Vector2f>();
+                List<Vector2f> transPos = new List<Vector2f>(shape.Vertices.Count);
                 for(int i = 0; i < shape.Vertices.Count; i++)
                     transPos.Add((shape.Vertices[i] * Zoom) + Offset);
-                shape.Draw(Graphics, transPos);
+                shape.Draw(graphics, transPos);
             }
         }
 
@@ -97,10 +111,11 @@ namespace System.Windows.Forms
 
         protected void OnPaint(object? sender, PaintEventArgs e)
         {
-            this.Graphics = e.Graphics;
-            this.Graphics.PixelOffsetMode = Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+            e.Graphics.PixelOffsetMode = Drawing.Drawing2D.PixelOffsetMode.HighSpeed;
+            e.Graphics.SmoothingMode = Drawing.Drawing2D.SmoothingMode.HighSpeed;
+            e.Graphics.CompositingQuality = Drawing.Drawing2D.CompositingQuality.HighSpeed;
 
-            DrawShapes();
+            DrawShapes(e.Graphics);
         }
 
         protected void OnMouseDown(object? sender, MouseEventArgs e)

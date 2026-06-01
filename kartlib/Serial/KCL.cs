@@ -726,7 +726,7 @@
             uint num = 0u;
             foreach (_Triangle triangle in this.Triangles)
             {
-                oBJ.Vertices.AddRange(this.GetVertices(triangle));
+                oBJ.Vertices.AddRange(this.GetTriangleVertices(triangle));
                 string text = triangle.Collision.ToString("X4");
                 bool flag = false;
                 int index = -1;
@@ -755,7 +755,7 @@
             return oBJ;
         }
 
-        private Vector3f[] GetVertices(_Triangle Plane)
+        public Vector3f[] GetTriangleVertices(_Triangle Plane)
         {
             Vector3f vector3f = this.Vertices[Plane.PosIndex];
             Vector3f vector3f2 = this.Normals[Plane.EdgeNormals[0]].Cross(this.Normals[Plane.FaceNormal]);

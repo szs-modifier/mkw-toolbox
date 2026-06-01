@@ -3,7 +3,7 @@
     public class DraggablePath : DraggableShape
     {
         public const int _width = 4;
-        public List<DraggableVertex> _endpoints { get; private set; }
+        public List<DraggableVertex> _endpoints { get; internal set; }
 
         public DraggablePath(List<Vector2f> vertices, Viewport2D viewport) : base(vertices, Color.Black, viewport)
         {

@@ -41,6 +41,11 @@
             TreeNode treeNode11 = new TreeNode("Battle Endpoints");
             TreeNode treeNode12 = new TreeNode("Stage Info");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(KMPEditorForm));
+            menuStrip = new MenuStrip();
+            editMenuItem = new ToolStripMenuItem();
+            importBackgroundModelMenuItem = new ToolStripMenuItem();
+            calculateYValuesMenuItem = new ToolStripMenuItem();
+            linkRespawnsMenuItem = new ToolStripMenuItem();
             sectionTree = new TreeView();
             entryListBox = new ListBox();
             entryPropertyGrid = new PropertyGrid();
@@ -52,6 +57,7 @@
             sectionGroupBox = new GroupBox();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
+            menuStrip.SuspendLayout();
             entryGroupBox.SuspendLayout();
             propertyGroupBox.SuspendLayout();
             sectionGroupBox.SuspendLayout();
@@ -64,6 +70,48 @@
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
             SuspendLayout();
+            // 
+            // menuStrip
+            // 
+            menuStrip.Items.AddRange(new ToolStripItem[] { editMenuItem });
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.Size = new Size(1113, 24);
+            menuStrip.TabIndex = 11;
+            menuStrip.Text = "menuStrip";
+            // 
+            // editMenuItem
+            // 
+            editMenuItem.DropDownItems.AddRange(new ToolStripItem[] { importBackgroundModelMenuItem, calculateYValuesMenuItem, linkRespawnsMenuItem });
+            editMenuItem.MergeAction = MergeAction.Insert;
+            editMenuItem.MergeIndex = 1;
+            editMenuItem.Name = "editMenuItem";
+            editMenuItem.Size = new Size(39, 20);
+            editMenuItem.Text = "Edit";
+            // 
+            // importBackgroundModelMenuItem
+            // 
+            importBackgroundModelMenuItem.Image = Properties.Resources.brres;
+            importBackgroundModelMenuItem.Name = "importBackgroundModelMenuItem";
+            importBackgroundModelMenuItem.Size = new Size(169, 22);
+            importBackgroundModelMenuItem.Text = "Import KCL...";
+            importBackgroundModelMenuItem.Click += importBackgroundModelMenuItem_Click;
+            // 
+            // calculateYValuesMenuItem
+            // 
+            calculateYValuesMenuItem.Image = Properties.Resources.ModuleScript;
+            calculateYValuesMenuItem.Name = "calculateYValuesMenuItem";
+            calculateYValuesMenuItem.Size = new Size(169, 22);
+            calculateYValuesMenuItem.Text = "Calculate Y values";
+            calculateYValuesMenuItem.Click += calculateYValuesMenuItem_Click;
+            // 
+            // linkRespawnsMenuItem
+            // 
+            linkRespawnsMenuItem.Image = Properties.Resources.ModuleScript;
+            linkRespawnsMenuItem.Name = "linkRespawnsMenuItem";
+            linkRespawnsMenuItem.Size = new Size(169, 22);
+            linkRespawnsMenuItem.Text = "Link respawns";
+            linkRespawnsMenuItem.Click += linkRespawnsMenuItem_Click;
             // 
             // sectionTree
             // 
@@ -97,7 +145,7 @@
             treeNode12.Name = "stgiNode";
             treeNode12.Text = "Stage Info";
             sectionTree.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3, treeNode4, treeNode5, treeNode6, treeNode7, treeNode8, treeNode9, treeNode10, treeNode11, treeNode12 });
-            sectionTree.Size = new Size(159, 558);
+            sectionTree.Size = new Size(159, 582);
             sectionTree.TabIndex = 1;
             sectionTree.AfterSelect += sectionTree_AfterSelect;
             // 
@@ -119,7 +167,7 @@
             entryPropertyGrid.Location = new Point(6, 22);
             entryPropertyGrid.Name = "entryPropertyGrid";
             entryPropertyGrid.PropertySort = PropertySort.NoSort;
-            entryPropertyGrid.Size = new Size(220, 248);
+            entryPropertyGrid.Size = new Size(220, 272);
             entryPropertyGrid.TabIndex = 3;
             entryPropertyGrid.ToolbarVisible = false;
             // 
@@ -166,7 +214,7 @@
             propertyGroupBox.Enabled = false;
             propertyGroupBox.Location = new Point(3, 313);
             propertyGroupBox.Name = "propertyGroupBox";
-            propertyGroupBox.Size = new Size(234, 276);
+            propertyGroupBox.Size = new Size(234, 300);
             propertyGroupBox.TabIndex = 7;
             propertyGroupBox.TabStop = false;
             propertyGroupBox.Text = "Properties";
@@ -187,14 +235,14 @@
             sectionGroupBox.Controls.Add(sectionTree);
             sectionGroupBox.Location = new Point(3, 3);
             sectionGroupBox.Name = "sectionGroupBox";
-            sectionGroupBox.Size = new Size(171, 586);
+            sectionGroupBox.Size = new Size(171, 610);
             sectionGroupBox.TabIndex = 9;
             sectionGroupBox.TabStop = false;
             sectionGroupBox.Text = "KMP Sections";
             // 
             // splitContainer1
             // 
-            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             splitContainer1.Location = new Point(0, 0);
             splitContainer1.Name = "splitContainer1";
             // 
@@ -233,9 +281,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1113, 592);
             Controls.Add(splitContainer1);
+            Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = menuStrip;
             Name = "KMPEditorForm";
             Text = "KMP Editor";
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
             entryGroupBox.ResumeLayout(false);
             propertyGroupBox.ResumeLayout(false);
             sectionGroupBox.ResumeLayout(false);
@@ -249,6 +301,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -263,5 +316,10 @@
         private GroupBox sectionGroupBox;
         private SplitContainer splitContainer1;
         private SplitContainer splitContainer2;
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem editMenuItem;
+        private ToolStripMenuItem importBackgroundModelMenuItem;
+        private ToolStripMenuItem calculateYValuesMenuItem;
+        private ToolStripMenuItem linkRespawnsMenuItem;
     }
 }

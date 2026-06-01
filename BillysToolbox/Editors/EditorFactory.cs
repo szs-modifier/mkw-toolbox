@@ -27,9 +27,9 @@ namespace BillysToolbox.Editors
                 case ".bmm":
                     BMM bmm = new BMM(buffer, fileName);
                     return new BMMEditorForm(bmm, parentInstance);
-                //case ".kmp":
-                //    KMP kmp = new KMP(buffer, fileName);
-                //    return new KMPEditorForm(kmp, parentInstance);
+                case ".kmp":
+                    KMP kmp = new KMP(buffer, fileName);
+                    return new KMPEditorForm(kmp, parentInstance);
                 case ".kcl":
                     KCL kcl = new KCL(buffer, fileName);
                     return new KCLEditorForm(kcl, parentInstance);

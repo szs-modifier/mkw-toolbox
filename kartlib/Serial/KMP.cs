@@ -1,4 +1,6 @@
-﻿namespace kartlib.Serial
+﻿using System.ComponentModel;
+
+namespace kartlib.Serial
 {
     public class KMP
     {
@@ -526,6 +528,7 @@
             public Vector3f Position { get; set; }
             public Vector3f Rotation { get; set; }
             public Vector3f Scale { get; set; }
+            [TypeConverter(typeof(HexUInt16Converter))]
             public UInt16 RouteID { get; set; }
             public UInt16[] Settings { get; set; }
             public UInt16 Flag { get; set; }

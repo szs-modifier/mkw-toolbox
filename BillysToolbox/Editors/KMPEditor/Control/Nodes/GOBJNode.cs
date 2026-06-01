@@ -1,4 +1,5 @@
-﻿using kartlib.Serial;
+﻿using DrawLib.Shapes;
+using kartlib.Serial;
 using static kartlib.Serial.KMP;
 
 namespace KMP_Editor.Control.Nodes
@@ -6,10 +7,15 @@ namespace KMP_Editor.Control.Nodes
     public class GOBJNode : Node
     {
         public _Section<_GOBJ> GOBJ { get; set; }
+        private readonly Viewport2D _viewport;
+        private readonly List<EntryPivotVertex<_GOBJ>> _vertices;
 
-        public GOBJNode(KMP kmp)
+        public GOBJNode(KMP kmp, Viewport2D viewport)
         {
             GOBJ = kmp.GOBJ;
+            _viewport = viewport;
+            _vertices = new List<EntryPivotVertex<_GOBJ>>();
+            RebuildVertices();
         }
 
         public override List<_ISectionEntry> GetData()
@@ -38,6 +44,7 @@ namespace KMP_Editor.Control.Nodes
             {
                 _GOBJ entry = (_GOBJ)GOBJ.AddEntry();
                 entry.ID = ob.SelectedID;
+                AddVertex(entry);
             }
         }
 
@@ -47,6 +54,7 @@ namespace KMP_Editor.Control.Nodes
 
             for (int i = GOBJ.Entries.Count - 1; i >= 0; i--)
                 if (GOBJ.Entries[i].ID == (ushort)id) GOBJ.RemoveEntry(i);
+            RebuildVertices();
         }
 
         public override void Populate(TreeNode node)
@@ -58,12 +66,46 @@ namespace KMP_Editor.Control.Nodes
             for (int i = 0; i < data.Count; i++)
             {
                 TreeNode treeNode = new TreeNode(((GOBJGroupNode)data[i]).ID.ToString());
-                treeNode.Tag = (GOBJGroupNode)data[i];
+                treeNode.Tag = new GOBJGroupNode(GOBJ, (ushort)((GOBJGroupNode)data[i]).ID, _viewport, RebuildVertices);
                 treeNode.ImageIndex = 4;
                 treeNode.SelectedImageIndex = 4;
 
                 node.Nodes.Add(treeNode);
             }
+        }
+        public override void AddShapes(int selectedIndex)
+        {
+            List<_ISectionEntry> groups = GetData();
+            for (int i = 0; i < _vertices.Count; i++)
+            {
+                _GOBJ entry = GOBJ.Entries[i];
+                bool highlighted = selectedIndex >= 0 && selectedIndex < groups.Count && entry.ID == (ushort)((GOBJGroupNode)groups[selectedIndex]).ID;
+                _vertices[i].Vertex.FillColor = highlighted ? KmpViewportSync.HighlightColor : Color.SaddleBrown;
+                _viewport.AddShape(_vertices[i].Vertex);
+            }
+        }
+
+        private void RebuildVertices()
+        {
+            _vertices.Clear();
+            foreach (_GOBJ entry in GOBJ.Entries)
+                AddVertex(entry);
+        }
+
+        private void AddVertex(_GOBJ entry)
+        {
+            DraggableVertexPivotArrow vertex = new DraggableVertexPivotArrow(
+                KmpViewportSync.ToVector2(entry.Position),
+                (int)entry.Rotation.Y,
+                _viewport);
+            vertex.FillColor = Color.SaddleBrown;
+            _vertices.Add(new EntryPivotVertex<_GOBJ>(
+                entry,
+                vertex,
+                value => value.Position,
+                (value, position) => value.Position = position,
+                value => value.Rotation,
+                (value, rotation) => value.Rotation = rotation));
         }
     }
 
@@ -72,17 +114,29 @@ namespace KMP_Editor.Control.Nodes
 
         private List<_ISectionEntry> Objects;
         private _Section<_GOBJ> GOBJ;
+        private readonly Viewport2D? _viewport;
+        private readonly Action? _rebuildParentVertices;
+        private readonly List<EntryPivotVertex<_GOBJ>> _vertices;
         internal ObjectIDEnum ID;
 
-        public GOBJGroupNode(_Section<_GOBJ> gobj, ushort id)
+        public GOBJGroupNode(_Section<_GOBJ> gobj, ushort id) : this(gobj, id, null, null) { }
+
+        public GOBJGroupNode(_Section<_GOBJ> gobj, ushort id, Viewport2D? viewport, Action? rebuildParentVertices)
         {
             ID = (ObjectIDEnum)id;
             Objects = new List<_ISectionEntry>();
             GOBJ = gobj;
+            _viewport = viewport;
+            _rebuildParentVertices = rebuildParentVertices;
+            _vertices = new List<EntryPivotVertex<_GOBJ>>();
 
             foreach (_GOBJ obj in GOBJ.Entries)
             {
-                if (obj.ID == (ushort)ID) Objects.Add(obj);
+                if (obj.ID == (ushort)ID)
+                {
+                    Objects.Add(obj);
+                    AddVertex(obj);
+                }
             }
         }
 
@@ -116,6 +170,8 @@ namespace KMP_Editor.Control.Nodes
             _GOBJ entry = (_GOBJ)GOBJ.AddEntry();
             entry.ID = (ushort)ID;
             Objects.Add(entry);
+            AddVertex(entry);
+            _rebuildParentVertices?.Invoke();
         }
 
         public override void RemoveEntry(int index)
@@ -127,6 +183,40 @@ namespace KMP_Editor.Control.Nodes
                     GOBJ.RemoveEntry(i);
                 }
             }
+            Objects.RemoveAt(index);
+            _vertices.RemoveAt(index);
+            _rebuildParentVertices?.Invoke();
+        }
+
+        public override void AddShapes(int selectedIndex)
+        {
+            if (_viewport == null)
+                return;
+
+            for (int i = 0; i < _vertices.Count; i++)
+            {
+                _vertices[i].Vertex.FillColor = i == selectedIndex ? KmpViewportSync.HighlightColor : Color.SaddleBrown;
+                _viewport.AddShape(_vertices[i].Vertex);
+            }
+        }
+
+        private void AddVertex(_GOBJ entry)
+        {
+            if (_viewport == null)
+                return;
+
+            DraggableVertexPivotArrow vertex = new DraggableVertexPivotArrow(
+                KmpViewportSync.ToVector2(entry.Position),
+                (int)entry.Rotation.Y,
+                _viewport);
+            vertex.FillColor = Color.SaddleBrown;
+            _vertices.Add(new EntryPivotVertex<_GOBJ>(
+                entry,
+                vertex,
+                value => value.Position,
+                (value, position) => value.Position = position,
+                value => value.Rotation,
+                (value, rotation) => value.Rotation = rotation));
         }
     }
 

@@ -16,6 +16,10 @@ namespace KMP_Editor.Control.Nodes
 
         public override string GetTitle(int index) { return "Stage Info"; }
 
+        public override bool CanAddEntries => false;
+
+        public override bool CanRemoveEntries => false;
+
         public override void AddEntry() { return; }
 
         public override void RemoveEntry(int index) { return; }

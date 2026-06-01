@@ -6,11 +6,13 @@ namespace DrawLib.Shapes
     {
         public const int _width = 4;
 
-        public Arrow(Vector2f pos1, Vector2f pos2) : base(new List<Vector2f> { pos1, pos2 }, Color.Black) { }
+        public Arrow(Vector2f pos1, Vector2f pos2) : this(pos1, pos2, Color.Black) { }
+
+        public Arrow(Vector2f pos1, Vector2f pos2, Color color) : base(new List<Vector2f> { pos1, pos2 }, color) { }
 
         public override void Draw(Graphics g, List<Vector2f> pos)
         {
-            Pen pen = new Pen(Color.Black, _width);
+            using Pen pen = new Pen(FillColor, _width);
             pen.CustomEndCap = new AdjustableArrowCap(_width - 1, _width - 1);
 
             float[] line = new float[4]

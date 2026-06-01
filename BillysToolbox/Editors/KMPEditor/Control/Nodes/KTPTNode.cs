@@ -51,10 +51,13 @@ namespace KMP_Editor.Control.Nodes
             Vertices.RemoveAt(index);
         }
 
-        public override void AddShapes()
+        public override void AddShapes(int selectedIndex)
         {
-            foreach(KTPTVertex k in Vertices)
-                Viewport.AddShape(k.Vertex);
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                Vertices[i].Vertex.FillColor = i == selectedIndex ? KmpViewportSync.HighlightColor : Color.Black;
+                Viewport.AddShape(Vertices[i].Vertex);
+            }
         }
     }
 

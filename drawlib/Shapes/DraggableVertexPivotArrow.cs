@@ -25,6 +25,8 @@
         {
             float arr_x = pos[0].X + (DraggableVertex._size / 2);
             float arr_y = pos[0].Y + (DraggableVertex._size / 2);
+            _vertex.FillColor = FillColor;
+            _arrow.FillColor = FillColor == Color.Black ? Color.Gainsboro : FillColor;
             _arrow.Draw(g, new List<Vector2f> { new Vector2f(arr_x, arr_y)});
             _vertex.Draw(g, pos);
         }

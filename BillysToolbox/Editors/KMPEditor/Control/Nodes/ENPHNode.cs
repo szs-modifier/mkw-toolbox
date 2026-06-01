@@ -63,14 +63,15 @@ namespace KMP_Editor.Control.Nodes
 
         public override void RemoveEntry(int index)
         {
-            _ENPH node = (_ENPH)ENPH.GetEntry(index);
-            for (int i = node.Start; i < node.Length + node.Start; i++)
+            _ENPH removedNode = (_ENPH)ENPH.GetEntry(index);
+            byte start = removedNode.Start;
+            for (int i = start; i < removedNode.Length + start; i++)
             {
-                ENPT.RemoveEntry(node.Start);
+                ENPT.RemoveEntry(start);
             }
             ENPH.RemoveEntry(index);
 
-            byte position = node.Start;
+            byte position = start;
             for (int i = index; i < ENPH.Length(); i++)
             {
                 _ENPH current = (_ENPH)ENPH.GetEntry(i);
@@ -98,17 +99,19 @@ namespace KMP_Editor.Control.Nodes
             }
         }
 
-        public override void AddShapes()
+        public override void AddShapes(int selectedIndex)
         {
-            foreach(ENPTVertex e in Vertices)
+            for (int i = 0; i < ENPH.Length(); i++)
             {
-                _viewport.AddShape(e.Vertex);
+                ENPHGroupNode groupNode = new ENPHGroupNode(KMP, i, _viewport);
+                groupNode.AddShapes(i == selectedIndex ? ENPHGroupNode.HighlightAllPoints : -1);
             }
         }
     }
 
     public class ENPHGroupNode : Node
     {
+        internal const int HighlightAllPoints = -2;
         public _Section<_ENPT> ENPT { get; private set; }
         public _ENPH ENPH { get; private set; }
         public ENPHPath Path { get; private set; }
@@ -174,13 +177,13 @@ namespace KMP_Editor.Control.Nodes
             ENPH.Length--;
         }
 
-        public override void AddShapes()
+        public override void AddShapes(int selectedIndex)
         {
+            Path.Path.FillColor = selectedIndex == HighlightAllPoints ? KmpViewportSync.HighlightColor : Color.Blue;
             _viewport.AddShape(Path.Path);
-            foreach(ENPTVertex e in Vertices)
-            {
-                _viewport.AddShape(e.Vertex);
-            }
+
+            if (selectedIndex >= 0 && selectedIndex < Path.Path.Vertices.Count)
+                _viewport.AddShape(KmpViewportSync.HighlightAt(Path.Path.Vertices[selectedIndex]));
         }
     }
 
