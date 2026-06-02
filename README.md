@@ -18,5 +18,6 @@ Wii file editor inspired by [Wexos's Toolbox](https://wiki.tockdom.com/wiki/Wexo
 | BLMAP* | No | No |
 | TPL | Yes | Yes |
 | BREFF | Yes | Yes |
+| BREFT | Yes | Yes |
 
 \* Still under development
