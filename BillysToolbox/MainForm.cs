@@ -8,9 +8,9 @@ namespace BillysToolbox
     public partial class MainForm : Form
     {
         public Dictionary<string, string> FileTypes = new Dictionary<string, string>()
-        {
+        { 
             { "SZS Files (*.szs)", "*.szs" },
-            { "ARC Files (*.arc, *.u8)", "*.arc,*.u8" },
+            { "ARC Files (*.arc; *.u8)", "*.arc;*.u8" },
             { "BMM Files (*.bmm)", "*.bmm" },
             { "KMP Files (*.kmp)", "*.kmp" },
             { "BLIGHT Files (*.blight)", "*.blight" },
@@ -35,6 +35,13 @@ namespace BillysToolbox
             OpenFileDialog ofd = new OpenFileDialog();
             StringBuilder filter = new StringBuilder();
 
+            string allSupportedExtensions = string.Join(";", FileTypes.Values
+                .Where(val => val != "*.*")
+                .Select(val => val.Replace(",", ";")));
+
+            filter.Append("All Supported Files|");
+            filter.Append(allSupportedExtensions);
+
             foreach (KeyValuePair<string, string> type in FileTypes)
             {
                 if (filter.ToString().CompareTo("") != 0)
@@ -45,6 +52,7 @@ namespace BillysToolbox
                 filter.Append(type.Value);
             }
             ofd.Filter = filter.ToString();
+            ofd.FilterIndex = 1;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
